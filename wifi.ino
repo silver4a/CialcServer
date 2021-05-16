@@ -82,7 +82,7 @@ bool wiFiConfig()
       preferences.putString("pref_ip",ipp);
       Serial.println("Configurando proximo reinicio. . .");
       Serial.println("IP para el proximo reinicio. . . "+ipp);
-      delay(10000);
+      delay(500);
       ESP.restart();  
     }
     return true;
@@ -107,47 +107,30 @@ String armarIp(String ip,String number){
 }
 
 void loopWiFi(){
-WiFiClient client = server.available();   // listen for incoming clients
-  if (client) {                             // if you get a client,
-    Serial.println("New Client.");           // print a message out the serial port
-    String currentLine = "";                // make a String to hold incoming data from the client
-    while (client.connected()) {            // loop while the client's connected
-      if (client.available()) {             // if there's bytes to read from the client,
-        char c = client.read();             // read a byte, then
-        Serial.write(c);                    // print it out the serial monitor
-        if (c == '\n') {                    // if the byte is a newline character
-          if (currentLine.length() == 0) {
-            client.println("HTTP/1.1 200 OK");
-            client.println("Content-type:text/html");
-            client.println();
-            break;
-          } else { 
-            currentLine = "";
-          }
-        } else if (c != '\r') {  
-          currentLine += c;   
-        }
-        
-        if (currentLine.endsWith("GET /data?state=1")) {
-          Serial.println("ENCENDIDO");
-          digitalWrite(2,1);
-        }
-        if (currentLine.endsWith("GET /data?state=0")) {
-          Serial.println("APAGADO");
-          digitalWrite(2,0);
-        }
-        if (currentLine.endsWith("GET /data?clear=1")) {
-          Serial.println("Limpiando preferencias y reseteando. . .");
-          delay(1000);
-          clearPreferences();
-        }
-      }
-    }
-    // close the connection:
-    client.stop();
-    Serial.println("Client Disconnected.");
+  WiFiClient client = server.available();   // listen for incoming clients
+  if (!client) {                             // if you get a client,
+    return;
   }
-}
+  client.setTimeout(1000); // default is 1000
+  //Leo la informacion solicitada.
+  String req = client.readStringUntil('\r');
+  String info = "";
+
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-type:text/html");
+  client.println();
+  
+  if(req.indexOf("data?auth=1")){
+    info += "AUTENTICADO";
+  }
+
+
+   client.print(info);
+  // close the connection:
+  client.println();
+  client.stop();
+  Serial.println("Client Disconnected.");
+  }
 
 int scan_wifi_networks()
 {

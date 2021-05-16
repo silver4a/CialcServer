@@ -33,13 +33,6 @@ void loopBT() {
             preferences.putString("pref_host", dataSplit[2]);
             preferences.putString("pref_ipNumber", dataSplit[3]);
             SerialBT.flush();
-            if(wiFiConfig()){ 
-              Serial.println("Conexión finalizada, reseteando. . .");
-              SerialBT.println("RESET");
-              delay(1000);
-            }else{
-              Serial.println("Error al conectar");
-            }
             ESP.restart();
             dataBT = "";
         }else{
@@ -50,7 +43,7 @@ void loopBT() {
              txNetworks += ssids_array[k] + "," ;
             }
             
-            SerialBT.println(txNetworks.substring(0,txNetworks.length()-1));
+            SerialBT.println("RESULT_SCAN," + txNetworks.substring(0,txNetworks.length()-1));
             dataBT = "";
           }else{
             dataBT = "";
