@@ -9,7 +9,7 @@
 const char* ssid     = "RODO";
 const char* password = "32828526D";
 const char* bluetooth_name = "CIALC_DEVICE";
-
+//Comentario pruebas
 bool bluetooth_state = false;
 
 String host = "";
