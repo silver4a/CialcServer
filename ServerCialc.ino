@@ -12,6 +12,11 @@ const char* bluetooth_name = "CIALC_DEVICE";
 //Comentario pruebas
 bool bluetooth_state = false;
 
+//-----------------------------------
+int progresoIntensidad = 0;
+int progresoTemperatura = 0;
+//-----------------------------------
+
 String host = "";
 int ipStatic[4];
 int subnetStatic[4];
@@ -38,7 +43,6 @@ void setup()
     preferences.begin("wifi_access",false);
     
     if(wiFiConfig()){
-      bluetoothClose();
       bluetooth_state = false;
       Serial.println("\n");
       Serial.println("DEVICE_HOST: "+host);
@@ -48,6 +52,7 @@ void setup()
       bluetooth_state = true;
     }
 
+    delay(1000);
 }
 
 void clearPreferences(){

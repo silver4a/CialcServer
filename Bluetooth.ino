@@ -32,7 +32,7 @@ void loopBT() {
             preferences.putString("pref_pass", dataSplit[1]);
             preferences.putString("pref_host", dataSplit[2]);
             preferences.putString("pref_ipNumber", dataSplit[3]);
-            SerialBT.flush();
+            bluetoothClose();
             ESP.restart();
             dataBT = "";
         }else{

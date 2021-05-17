@@ -120,8 +120,24 @@ void loopWiFi(){
   client.println("Content-type:text/html");
   client.println();
   
-  if(req.indexOf("data?auth=1")){
-    info += "AUTENTICADO";
+  if(req.indexOf("data?auth=1") >0){
+    info += "AUTENTICADO,"+String(progresoIntensidad)+","+String(progresoTemperatura);
+  }
+
+  if(req.indexOf("data?intensidad=")>0){
+    progresoIntensidad = req.substring(req.lastIndexOf("=") + 1, req.indexOf("&")).toInt();
+    Serial.println("intensidad progress: "+String(progresoIntensidad));
+    info += "ProgressBarIntensidad = "+ String(progresoIntensidad);
+
+    //Los calculos.
+  }
+
+  if(req.indexOf("data?temperatura=")>0){
+    progresoTemperatura = req.substring(req.lastIndexOf("=") + 1, req.indexOf("&")).toInt();
+    Serial.println("temperatura progress: "+String(progresoTemperatura));
+    info += " - <br/> ProgressBarTemperatura = "+ String(progresoTemperatura);
+    //Los calculos.
+    
   }
 
 
